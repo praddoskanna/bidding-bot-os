@@ -5,7 +5,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 //PAGE COMPONENTS
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-
+import Collections from "./pages/Collections";
+import Bidder from "./pages/Bidder";
+import Wallets from "./pages/Wallets";
 
 // CSS IMPORTS
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,6 +20,7 @@ import '@fontsource/roboto/700.css';
 
 import CryptoJS from "crypto-js";
 import { secret_key } from './constants';
+import Header from './components/Header';
 
 function App() {
 
@@ -45,10 +48,17 @@ function App() {
         </Routes >)
         :
         (
-          <Routes>
-            <Route path="/" exact element={<Dashboard setIsAuthenticated={setIsAuthenticated} />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes >)
+          <>
+            <Header setIsAuthenticated={setIsAuthenticated} />
+            <Routes>
+              <Route path="/" exact element={<Dashboard />} />
+              <Route path="/collections" exact element={<Collections />} />
+              <Route path="/bidder" exact element={<Bidder setIsAuthenticated={setIsAuthenticated} />} />
+              <Route path="/wallets" exact element={<Wallets setIsAuthenticated={setIsAuthenticated} />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes >
+          </>)
+
       }
 
     </Router>

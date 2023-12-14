@@ -13,13 +13,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
+import { useNavigate } from 'react-router-dom';
+
 const pages = ['Collections', 'Bidder', 'Wallets'];
 const settings = ['Account', 'Dashboard', 'Logout'];
 
-function Header() {
+function Header({ setIsAuthenticated }) {
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -27,6 +31,15 @@ function Header() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+
+  const handleLogoutFunction = () => {
+    setIsAuthenticated(false)
+    sessionStorage.removeItem('user')
+  }
+
+  const handleNavigation = (page) => {
+    navigate(page.toLowerCase());
+  }
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -89,7 +102,7 @@ function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => handleNavigation(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -116,11 +129,7 @@ function Header() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
+              <Button key={page} onClick={() => handleNavigation(page)} sx={{ my: 2, color: 'white', display: 'block' }} >
                 {page}
               </Button>
             ))}
@@ -148,11 +157,11 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              {/* {settings.map((setting) => ( */}
+              <MenuItem onClick={handleLogoutFunction}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
+              {/* ))} */}
             </Menu>
           </Box>
         </Toolbar>
