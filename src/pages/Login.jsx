@@ -17,6 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { secret_key } from "../constants.jsx"
 import CryptoJS from "crypto-js";
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -35,7 +36,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function Login({ setIsAuthenticated }) {
 
   const [errorMessage, setErrorMessage] = useState("")
   const [showPassword, setShowPassword] = React.useState(false);
@@ -53,8 +54,8 @@ export default function Login() {
     if (data.get('username') === "undecided.eth" && data.get('password') === "chutiya123") {
       const user = { username: 'undecided.eth', password: 'chutiya123' };
       const encryptedUser = CryptoJS.AES.encrypt(JSON.stringify(user), secret_key).toString();
-      // console.log(encryptedUser, "encryptedUser");
       sessionStorage.setItem('user', encryptedUser);
+      setIsAuthenticated(true);
     }
     else {
       setErrorMessage("Invalid Username or Password");
@@ -66,8 +67,12 @@ export default function Login() {
 
   return (
 
-    <ThemeProvider theme={defaultTheme}>
-      <Grid container>
+    <ThemeProvider theme={defaultTheme} >
+      <Grid container sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}>
         <Box
           sx={{
             marginTop: 8,
